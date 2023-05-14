@@ -148,7 +148,7 @@ public class UsrMemberController {
 			return ResultData.from("F-N", "닉네임를 입력해주세요");
 		}
 		
-		Member existsMember = memberService.getMemberByLoginId(nickname);
+		Member existsMember = memberService.getMemberByNickname(nickname);
 		
 		if (existsMember != null) {
 			return ResultData.from("F-1", "해당 닉네임은 이미 사용중인 닉네임입니다", "nickname", nickname);
@@ -164,7 +164,7 @@ public class UsrMemberController {
 			return ResultData.from("F-N", "이메일을 입력해주세요");
 		}
 		
-		Member existsMember = memberService.getMemberByLoginId(email);
+		Member existsMember = memberService.getMemberByEmail(email);
 		
 		if (existsMember != null) {
 			return ResultData.from("F-1", "해당 이메일은 이미 사용중인 닉네임입니다", "email", email);

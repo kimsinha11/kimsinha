@@ -131,4 +131,18 @@ public interface MemberRepository {
 	List<Member> getForPrintMembers(String authLevel, String searchKeywordTypeCode, String searchKeyword,
 			int limitStart, int limitTake);
 
+	@Select("""
+			SELECT *
+			FROM `member`
+			WHERE nickname = #{nickname}
+			""")
+	Member getMemberByNickname(String nickname);
+
+	@Select("""
+			SELECT *
+			FROM `member`
+			WHERE email = #{email}
+			""")
+	Member getMemberByEmail(String email);
+
 }
