@@ -1,0 +1,60 @@
+@font-face {
+    font-family: 'KCCChassam';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCCChassam.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html > body {
+	font-family: 'KCCChassam', woff2;
+}
+
+/* 라이브러리 */
+.table-box-type-1>thead th, .table-box-type-1 th{
+	border: 2px solid black;
+		
+}
+
+html {
+	width: 1200px;
+	margin: 0 auto; 
+}
+
+table {
+	border: 2px solid black;
+	border-collapse: collapse;
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+body > div> div > ul > li > a{
+	display: none;
+}
+
+body > div > .list:hover >  ul > li > a {
+	display: block;
+}
+
+th {
+	border: 1px solid black;
+	text-align: center;
+	padding: 8px;
+	font-size: 17px;
+	font-weight: light;
+}
+
+.btns {
+	text-align: left;
+	padding: 20px 500px;
+}
+
+input {
+	border: 1px solid black;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
