@@ -14,8 +14,8 @@
 		<div style="display: inline-block; border: 2px solid black; padding: 100px; text-align: left;">
 
 				<div>
-						아이디 :
-						<input class="input input-bordered input-sm w-full max-w-xl" style=" border:1px solid black;" type="text" name="loginId" placeholder="아이디를 입력해주세요" />
+						이메일 :
+						<input class="input input-bordered input-sm w-full max-w-xl" style=" border:1px solid black;" type="text" name="email" placeholder="이메일을 입력해주세요" />
 				</div>
 				<div>
 						비밀번호 :

@@ -180,9 +180,6 @@ public class Rq {
 
 	}
 
-	public String getFindLoginIdUri() {
-		return "../member/findLoginId?afterFindLoginIdUri=" + getAfterFindLoginIdUri();
-	}
 
 	private String getAfterFindLoginIdUri() {
 		return getEncodedCurrentUri();

@@ -1,23 +1,41 @@
 @font-face {
-    font-family: 'KCCChassam';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCCChassam.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'Poppins';
+	src:
+		url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap')
+	;
+	font-weight: normal;
+	font-style: normal;
 }
 
-html > body {
-	font-family: 'KCCChassam', woff2;
-}
-
-/* 라이브러리 */
-.table-box-type-1>thead th, .table-box-type-1 th{
-	border: 2px solid black;
-		
+html>body {
+	font-family: 'Poppins', sans-serif;
 }
 
 html {
-	width: 1200px;
-	margin: 0 auto; 
+	width: 1300px;
+	margin: 0 auto;
+
+}
+
+/* 라이브러리 */
+.table-box-type-1>thead th, .table-box-type-1 th {
+	border: 1px solid black;
+
+	padding: 5px;
+}
+
+.table-box-type-2>thead th, .table-box-type-2 th {
+	border: 1px solid black;
+		margin-top: 100%;
+	padding: 5px;
+}
+
+.title-text, .comment-count {
+	display: inline-block;
+}
+
+.title-text:hover, .comment-count:hover {
+	text-decoration: underline;
 }
 
 table {
@@ -28,18 +46,17 @@ table {
 	margin-right: auto;
 }
 
-body > div> div > ul > li > a{
+body>div>.list>ul {
 	display: none;
 }
 
-body > div > .list:hover >  ul > li > a {
+body>div>.list:hover>ul {
 	display: block;
 }
 
 th {
 	border: 1px solid black;
 	text-align: center;
-	padding: 8px;
 	font-size: 17px;
 	font-weight: light;
 }
@@ -49,12 +66,22 @@ th {
 	padding: 20px 500px;
 }
 
-input {
-	border: 1px solid black;
-}
 .pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
 }
 
+.pagination a {
+	color: black;
+	float: left;
+	padding: 8px 16px;
+	text-decoration: none;
+	border: 1px solid #ddd;
+	margin: 0 4px;
+}
+
+.btn-text-link.active {
+	color: white;
+	background-color: #6c757d;
+}

@@ -20,13 +20,12 @@ public class MemberService {
 		this.memberRepository = memberRepository;
 	}
 
-	public ResultData<Integer> join(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
-			String email) {
+	public ResultData<Integer> join(String email, String loginPw, String name, String nickname, String cellphoneNum) {
 		// 로그인 아이디 중복체크
-		Member existsMember = getMemberByLoginId(loginId);
+		Member existsMember = getMemberByEmail(email);
 
 		if (existsMember != null) {
-			return ResultData.from("F-7", Ut.f("이미 사용중인 아이디(%s)입니다", loginId));
+			return ResultData.from("F-7", Ut.f("이미 사용중인 이메일(%s)입니다", email));
 		}
 
 		// 이름 + 이메일 중복체크
@@ -36,7 +35,7 @@ public class MemberService {
 			return ResultData.from("F-8", Ut.f("이미 사용중인 이름(%s)과 이메일(%s)입니다", name, email));
 		}
 
-		memberRepository.join(loginId, loginPw, name, nickname, cellphoneNum, email);
+		memberRepository.join(email, loginPw, name, nickname, cellphoneNum);
 
 		int id = memberRepository.getLastInsertId();
 
@@ -47,9 +46,7 @@ public class MemberService {
 		return memberRepository.getMemberByNameAndEmail(name, email);
 	}
 
-	public Member getMemberByLoginId(String loginId) {
-		return memberRepository.getMemberByLoginId(loginId);
-	}
+
 
 	public Member getMemberById(int id) {
 		return memberRepository.getMemberById(id);
@@ -77,6 +74,16 @@ public class MemberService {
 
 	public Member getMemberByEmail(String email) {
 		return memberRepository.getMemberByEmail(email);
+	}
+	public Member profile(int id) {
+		return memberRepository.profile(id);
+	}
+	public ResultData modifyMember(int id, String loginPw, String name, String nickname, String cellphoneNum) {
+		memberRepository.modifyMember(id,loginPw, name, nickname, cellphoneNum);
+
+		Member member = getMemberById(id);
+
+		return ResultData.from("S-1", Ut.f("%d번 회원을 수정 했습니다", id), "member", member);
 	}
 
 }

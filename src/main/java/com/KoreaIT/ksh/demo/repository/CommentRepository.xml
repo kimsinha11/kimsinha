@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.KoreaIT.ksh.demo.repository.CommentRepository">
+
+
+	<insert id="cwriteComment">
+		INSERT INTO comment
+		SET regDate = NOW(),
+		updateDate=
+		NOW(),
+		`body`= #{body},
+		memberId = #{memberId},
+		boardId =
+		#{boardId},
+		relTypeCode =
+		'comment',
+		relId =
+		#{relId}
+	</insert>
+
+
+	<select id="getComment" resultType="Comment">
+		SELECT comment.*,
+		 member.name
+		AS 'name'
+		FROM comment
+		INNER JOIN `member`
+		ON comment.memberId =
+		member.id
+		WHERE comment.id
+		=
+		#{id} 
+
+	</select>
+
+	<delete id="cdeleteComment">
+		DELETE FROM
+		comment
+		WHERE id = #{id}
+	</delete>
+
+	<update id="cmodifyComment">
+		UPDATE comment
+		<set>
+			<if test="body != null and body != ''">`body` = #{body},</if>
+			updateDate= NOW()
+		</set>
+		WHERE id = #{id} 
+	</update>
+
+	<select id="getLastInsertId" resultType="int">
+		SELECT LAST_INSERT_ID()
+	</select>
+
+	<select id="getComments" resultType="Comment">
+		SELECT comment.*, member.name
+		FROM `comment`
+		INNER JOIN `member`
+		ON comment.memberId = member.id
+		INNER JOIN article
+		ON comment.relId = article.id
+		WHERE comment.relId = #{id}
+		ORDER BY comment.id DESC
+		
+	</select>
+
+
+</mapper>

@@ -26,6 +26,7 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
 	NeedLogOutInterceptor needLogoutInterceptor;
 
 
+
 	// /resource/common.css
 	// 인터셉터 적용
 	@Override
@@ -39,24 +40,23 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
 		ir.excludePathPatterns("/resource/**");
 		ir.excludePathPatterns("/error");
 
+		ir = registry.addInterceptor(needLoginInterceptor);
+		ir.addPathPatterns("/usr/article/write");
+		ir.addPathPatterns("/usr/article/doWrite");
+		ir.addPathPatterns("/usr/article/modify");
+		ir.addPathPatterns("/usr/article/doModify");
+		ir.addPathPatterns("/usr/article/doDelete");
 
 		ir.addPathPatterns("/usr/member/myPage");
 		ir.addPathPatterns("/usr/member/checkPw");
 		ir.addPathPatterns("/usr/member/doCheckPw");
 		ir.addPathPatterns("/usr/member/modify");
 		ir.addPathPatterns("/usr/member/doModify");
-
-	
-		ir = registry.addInterceptor(needLogoutInterceptor);
-		ir.addPathPatterns("/usr/member/login");
-		ir.addPathPatterns("/usr/member/doLogin");
-		ir.addPathPatterns("/usr/member/getLoginIdDup");
-		ir.addPathPatterns("/usr/member/join");
-		ir.addPathPatterns("/usr/member/doJoin");
-		ir.addPathPatterns("/usr/member/findLoginId");
-		ir.addPathPatterns("/usr/member/doFindLoginId");
-		ir.addPathPatterns("/usr/member/findLoginPw");
-		ir.addPathPatterns("/usr/member/doFindLoginPw");
+		
+		ir.addPathPatterns("/usr/comment/doWrite");
+		ir.addPathPatterns("/usr/comment/modify");
+		ir.addPathPatterns("/usr/comment/doModify");
+		ir.addPathPatterns("/usr/comment/doDelete");
 
 	}
 

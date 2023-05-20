@@ -5,12 +5,13 @@
 <%@ include file="../common/head.jspf"%>
 <!--  lodash debounce -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
-<br /><br /><br />
+<br />
+<br />
+<br />
 <script>
 	let submitJoinFormDone = false;
-	let validLoginId ="";
-	let validNickname ="";
 	let validEmail ="";
+	let validNickname ="";
 	let validcellphoneNum ="";
 
 	function submitJoinForm(form) {
@@ -19,14 +20,14 @@
 			return;
 		}
 		form.loginId.value = form.loginId.value.trim();
-		if (form.loginId.value == 0) {
-			alert('아이디를 입력해주세요');
-			form.loginId.focus();
+		if (form.email.value == 0) {
+			alert('이메일을 입력해주세요');
+			form.email.focus();
 			return;
 		}
-		if (form.loginId.value != validLoginId) {
-			alert('사용할 수 없는 아이디입니다');
-			form.loginId.focus();
+		if (form.email.value != validLoginId) {
+			alert('사용할 수 없는 이메일입니다');
+			form.email.focus();
 			return;
 		}
 		form.loginPw.value = form.loginPw.value.trim();
@@ -57,11 +58,7 @@
 			alert('닉네임을 입력해주세요');
 			return;
 		}
-		form.email.value = validEmail;
-		if (form.email.value == 0) {
-			alert('이메일을 입력해주세요');
-			return;
-		}
+	
 		form.cellphoneNum.value = form.validcellphoneNum.value.trim();
 		if (form.cellphoneNum.value == 0) {
 			alert('전화번호를 입력해주세요');
@@ -72,42 +69,45 @@
 		form.submit();
 	}
 	
-	function checkLoginIdDup(el) {
-		$('.checkDup-msg').empty();
-		const form = $(el).closest('form').get(0);
-		const loginId = form.loginId.value.trim();
-		if(form.loginId.value.length == 0) {
-			validLoginId ='';
-			$('.checkDup-msg').html('<div>아이디를 입력해주세요.</div>');
-			return;
+	function checkEmailDup(el) {
+		  $('.checkDup-msg3').empty();
+		  const form = $(el).closest('form').get(0);
+		  const email = form.email.value.trim();
+		  if (form.email.value.length == 0) {
+		    validEmail ='';
+		    $('.checkDup-msg3').html('<div>이메일을 입력해주세요.</div>');
+		    return;
+		  }
+		  if (validEmail == form.email.value) {
+		    return;
+		  }
+		  if (email.length < 5 || email.length > 20) {
+		    $('.checkDup-msg3').html('<div>5글자 ~ 20글자 사이로 입력해주세요</div>');
+		    return;
+		  }
+		  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		  if (!emailPattern.test(email)) {
+		    $('.checkDup-msg3').html('<div>이메일 형식이 올바르지 않습니다.</div>');
+		    return;
+		  }
+		  $.get('../member/getEmailDup', {
+		    isAjax : 'Y',
+		    email : email
+		  }, function(data) {
+		    if (form.email.value.trim() !== email) {
+		      // 검사 중 입력 값이 바뀌었을 때
+		      return;
+		    }
+		    $('.checkDup-msg3').html('<div>' + data.msg + '</div>');
+		    if (data.success) {
+		      validEmail = data.data1;
+		    } else {
+		      validEmail = '';
+		    }
+		  }, 'json');
 		}
-		if(validLoginId == form.loginId.value) {
-			return;
-		}
-		if(loginId.length < 5 || loginId.length > 20) {
-			$('.checkDup-msg').html('<div>5글자 ~ 20글자 사이로 입력해주세요</div>');
-			return;
-		} 
-		
-		$.get('../member/getLoginIdDup', {
-			isAjax : 'Y',
-			loginId : loginId
-		}, function(data) {
-			if (form.loginId.value.trim() !== loginId) {
-				// 검사 중 입력 값이 바뀌었을 때
-				return;
-			}
-			
-			$('.checkDup-msg').html('<div>' + data.msg + '</div>')
-			if(data.success){
-				validLoginId = data.data1;
-			} else {
-				validLoginId = '';
-			}
-		}, 'json');
-	}
-		const checkLoginIdDuplication = _.debounce(checkLoginIdDup,500);
-	
+		const checkEmailDuplication = _.debounce(checkEmailDup, 500);
+
 
 		function checkNicknameDup(el) {
 			$('.checkDup-msg2').empty();
@@ -145,45 +145,7 @@
 		}
 		const checkNicknameDuplication = _.debounce(checkNicknameDup,500); 
 		
-		function checkEmailDup(el) {
-			  $('.checkDup-msg3').empty();
-			  const form = $(el).closest('form').get(0);
-			  const email = form.email.value.trim();
-			  if (form.email.value.length == 0) {
-			    validEmail ='';
-			    $('.checkDup-msg3').html('<div>이메일을 입력해주세요.</div>');
-			    return;
-			  }
-			  if (validEmail == form.email.value) {
-			    return;
-			  }
-			  if (email.length < 5 || email.length > 20) {
-			    $('.checkDup-msg3').html('<div>5글자 ~ 20글자 사이로 입력해주세요</div>');
-			    return;
-			  }
-			  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-			  if (!emailPattern.test(email)) {
-			    $('.checkDup-msg3').html('<div>이메일 형식이 올바르지 않습니다.</div>');
-			    return;
-			  }
-			  $.get('../member/getEmailDup', {
-			    isAjax : 'Y',
-			    email : email
-			  }, function(data) {
-			    if (form.email.value.trim() !== email) {
-			      // 검사 중 입력 값이 바뀌었을 때
-			      return;
-			    }
-			    $('.checkDup-msg3').html('<div>' + data.msg + '</div>');
-			    if (data.success) {
-			      validEmail = data.data1;
-			    } else {
-			      validEmail = '';
-			    }
-			  }, 'json');
-			}
-			const checkEmailDuplication = _.debounce(checkEmailDup, 500);
-	  
+		
 			
 			
 			function checkPassword(el) {
@@ -240,24 +202,25 @@
 <form style="text-align: center;" method="post" onsubmit="submitJoinForm(this); return false;" action="doJoin">
 		<div style="display: inline-block; border: 2px solid black; padding: 50px; width: 700px; text-align: left;">
 				<div>
-						아이디 :
-						<input onkeyup="checkLoginIdDuplication(this);" class="input input-bordered input-sm w-full max-w-xs" type="text"
-								name="loginId" placeholder="아이디를 입력해주세요" id="loginId" />
-
+						이메일 :
+						<input onkeyup="checkEmailDuplication(this);" class="input input-bordered input-sm w-full max-w-xs"
+								style="border: 1px solid black;" value="" type="text" name="email" placeholder="이메일을 입력해주세요"
+								pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
 				</div>
-				<div style="font-size: 15px; color: red;" class="checkDup-msg"></div>
+				<div style="font-size: 15px; color: red;" class="checkDup-msg3"></div>
 				<br />
 				<div>
 						비밀번호 :
 						<input onkeyup="checkPassword(this);" class="input input-bordered input-sm w-full max-w-xs" type="password"
-								name="loginPw" placeholder="비밀번호를 입력해주세요" pattern="^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,}$"autocomplete="off" />
+								name="loginPw" placeholder="비밀번호를 입력해주세요" pattern="^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,}$"
+								autocomplete="off" />
 				</div>
 				<div style="font-size: 15px; color: red;" class="checkDup-msg5"></div>
 				<br />
 				<div>
 						비밀번호 확인:
 						<input onkeyup="checkPassword(this);" class="input input-bordered input-sm w-full max-w-xs" type="password"
-								name="loginPwConfirm" placeholder="비밀번호를 입력해주세요"autocomplete="off" />
+								name="loginPwConfirm" placeholder="비밀번호를 입력해주세요" autocomplete="off" />
 				</div>
 				<div style="font-size: 15px; color: red;" class="checkDup-msg4"></div>
 				<br />
@@ -269,28 +232,23 @@
 				<div>
 						닉네임 :
 						<input onkeyup="checkNicknameDuplication(this);" class="input input-bordered input-sm w-full max-w-xs" type="text"
-								name="nickname" placeholder="닉네임을 입력해주세요"  id="nickname" />
+								name="nickname" placeholder="닉네임을 입력해주세요" id="nickname" />
 
 				</div>
 				<div style="font-size: 15px; color: red;" class="checkDup-msg2"></div>
 				<br />
 				<div>
 						전화번호 :
-						<input onkeyup="checkPhoneNumber(this);" class="input input-bordered input-sm w-full max-w-xs" value="" type="text" name="cellphoneNum"
-								placeholder="전화번호를 입력해주세요" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" autocomplete="off" />
+						<input onkeyup="checkPhoneNumber(this);" class="input input-bordered input-sm w-full max-w-xs" value=""
+								type="text" name="cellphoneNum" placeholder="전화번호를 입력해주세요" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+								autocomplete="off" />
 				</div>
 				<div style="font-size: 15px; color: red;" class="checkDup-msg6"></div>
 				<br />
-				<div>
-						이메일 :
-						<input onkeyup="checkEmailDuplication(this);" class="input input-bordered input-sm w-full max-w-xs"
-								style="border: 1px solid black;" value="" type="text" name="email" placeholder="이메일을 입력해주세요" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
-				</div>
-				<div style="font-size: 15px; color: red;" class="checkDup-msg3"></div>
-				<br />
+
 				<div style="text-align: center">
-						<button style="display: inline; border:1px solid black" type="submit">회원가입</button>
-						<a style="display: inline; border:1px solid black; padding:2px 0;"   href="/usr/member/login">로그인</a>
+						<button style="display: inline; border: 1px solid black" type="submit">회원가입</button>
+						<a style="display: inline; border: 1px solid black; padding: 2px 0;" href="/usr/member/login">로그인</a>
 				</div>
 		</div>
 </form>

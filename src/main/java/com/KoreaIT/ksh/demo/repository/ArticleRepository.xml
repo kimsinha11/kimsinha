@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.KoreaIT.ksh.demo.repository.ArticleRepository">
+
+
+	<insert id="writeArticle">
+		INSERT INTO article
+		SET regDate = NOW(),
+		updateDate=
+		NOW(),
+		title =#{title},
+		`body`= #{body},
+		memberId = #{memberId},
+		boardId =
+		#{boardId},
+		hitCount =
+		0
+	</insert>
+
+	<select id="getArticles" resultType="Article">
+		SELECT article.*,
+		member.name AS 'name'
+		FROM article
+		INNER JOIN
+		`member`
+		ON article.memberId =
+		member.id
+		WHERE 1
+		<if test="boardId != 0">
+			AND article.boardId = #{boardId}
+		</if>
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchId != null and searchId.intValue() == 1">
+					AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+				<when test="searchId != null and searchId.intValue() == 2">
+					AND body LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+				<otherwise>
+					AND (title LIKE CONCAT('%', #{searchKeyword}, '%') OR
+					body LIKE
+					CONCAT('%', #{searchKeyword}, '%'))
+				</otherwise>
+			</choose>
+		</if>
+		GROUP BY article.id
+		ORDER BY article.id DESC
+		<if test="i >= 0">
+			LIMIT #{i}, #{itemsPerPage}
+		</if>
+	</select>
+
+	<select id="getArticle" resultType="Article">
+		SELECT article.*,
+		member.name AS 'name'
+		FROM article
+		INNER JOIN `member`
+		ON article.memberId = member.id
+		WHERE article.id
+		=
+		#{id}
+		
+	</select>
+
+	<delete id="deleteArticle">
+		DELETE FROM
+		article
+		WHERE id = #{id}
+	</delete>
+
+	<update id="modifyArticle">
+		UPDATE article
+		<set>
+			<if test="title != null and title != ''">title = #{title},</if>
+			<if test="body != null and body != ''">`body` = #{body},</if>
+			updateDate= NOW()
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<select id="getLastInsertId" resultType="int">
+		SELECT LAST_INSERT_ID()
+	</select>
+
+	<select id="getCommentsCount" resultType="Article">
+		SELECT article.id AS 'id', COUNT(*) AS 'count'
+				FROM `comment`
+				INNER JOIN article
+				ON comment.relId = article.id
+				GROUP BY article.id
+	</select>
+
+	<update id="increaseHitCount">
+		UPDATE article
+		SET hitCount = hitCount + 1
+		WHERE id = #{id}
+	</update>
+	
+
+	
+</mapper>

@@ -24,14 +24,14 @@ public interface MemberRepository {
 			INSERT INTO `member`
 			SET regDate = NOW(),
 			updateDate = NOW(),
-			loginId = #{loginId},
+			email = #{email},
 			loginPw = #{loginPw},
 			`name` = #{name},
 			nickname = #{nickname},
-			cellphoneNum = #{cellphoneNum},
-			email = #{email}
+			cellphoneNum = #{cellphoneNum}
+		
 			""")
-	void join(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email);
+	void join(String email, String loginPw, String name, String nickname, String cellphoneNum);
 
 	@Select("""
 			SELECT *
@@ -48,9 +48,9 @@ public interface MemberRepository {
 	@Select("""
 			SELECT *
 			FROM `member`
-			WHERE loginId = #{loginId}
+			WHERE email = #{email}
 			""")
-	Member getMemberByLoginId(String loginId);
+	Member getMemberByEmail(String email);
 
 	@Select("""
 			SELECT *
@@ -72,8 +72,8 @@ public interface MemberRepository {
 			</if>
 			<if test="searchKeyword != ''">
 				<choose>
-					<when test="searchKeywordTypeCode == 'loginId'">
-						AND M.loginId LIKE CONCAT('%', #{searchKeyword}, '%')
+					<when test="searchKeywordTypeCode == 'email'">
+						AND M.email LIKE CONCAT('%', #{searchKeyword}, '%')
 					</when>
 					<when test="searchKeywordTypeCode == 'name'">
 						AND M.name LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -83,7 +83,7 @@ public interface MemberRepository {
 					</when>
 					<otherwise>
 						AND (
-							M.loginId LIKE CONCAT('%', #{searchKeyword}, '%')
+							M.email LIKE CONCAT('%', #{searchKeyword}, '%')
 							OR M.name LIKE CONCAT('%', #{searchKeyword}, '%')
 							OR M.nickname LIKE CONCAT('%', #{searchKeyword}, '%')
 							)
@@ -104,8 +104,8 @@ public interface MemberRepository {
 			</if>
 			<if test="searchKeyword != ''">
 				<choose>
-					<when test="searchKeywordTypeCode == 'loginId'">
-						AND M.loginId LIKE CONCAT('%', #{searchKeyword}, '%')
+					<when test="searchKeywordTypeCode == 'email'">
+						AND M.email LIKE CONCAT('%', #{searchKeyword}, '%')
 					</when>
 					<when test="searchKeywordTypeCode == 'name'">
 						AND M.name LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -115,7 +115,7 @@ public interface MemberRepository {
 					</when>
 					<otherwise>
 						AND (
-							M.loginId LIKE CONCAT('%', #{searchKeyword}, '%')
+							M.email LIKE CONCAT('%', #{searchKeyword}, '%')
 							OR M.name LIKE CONCAT('%', #{searchKeyword}, '%')
 							OR M.nickname LIKE CONCAT('%', #{searchKeyword}, '%')
 							)
@@ -138,11 +138,27 @@ public interface MemberRepository {
 			""")
 	Member getMemberByNickname(String nickname);
 
-	@Select("""
-			SELECT *
-			FROM `member`
-			WHERE email = #{email}
+	@Update("""
+			<script>
+			UPDATE `member`
+			<set>
+				<if test="loginPw != null">
+					loginPw = #{loginPw},
+				</if>
+				<if test="name != null">
+					name = #{name},
+				</if>
+				<if test="nickname != null">
+					nickname = #{nickname},
+				</if>
+				<if test="cellphoneNum != null">
+					cellphoneNum = #{cellphoneNum},
+				</if>
+		
+				updateDate= NOW()
+			</set>
+			WHERE id = #{id}
+			</script>
 			""")
-	Member getMemberByEmail(String email);
-
+	void modifyMember(int id, String loginPw, String name, String nickname, String cellphoneNum);
 }
