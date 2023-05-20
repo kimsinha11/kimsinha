@@ -151,7 +151,9 @@ public class UsrArticleController {
 	public String getArticle(Model model, int id, int boardId) {
 
 		Article article = articleService.getArticle(id);
-
+		if (article == null) {
+			return rq.jsHistoryBackOnView("존재하지 않는 게시물입니다");
+		}
 		
 		model.addAttribute("article", article);
 		model.addAttribute("loginedMemberId", rq.getLoginedMemberId());
